@@ -1,5 +1,6 @@
 const request = require('supertest');
-const { sequelize, User } = require('../../src/models');
+const sequelize = require('../../src/config/database'); // updated path
+const User = require('../../src/models/userModel'); // specific model import
 const app = require('../../src/app');
 
 beforeAll(async () => {
