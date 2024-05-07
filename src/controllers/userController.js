@@ -1,6 +1,9 @@
 const User = require('../models/userModel');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
-exports.createUser = async (req, res) => {
+/* exports.createUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         if (!name || !email || !password) {
@@ -11,6 +14,41 @@ exports.createUser = async (req, res) => {
     } catch (error) {
         res.status(500).send(error.message);
     }
+}; */
+
+exports.createUser = async (req, res) => {
+    const { name, email, password } = req.body;
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newUser = await User.create({
+            name,
+            email,
+            password: hashedPassword
+        });
+        return res.status(201).json({ id: newUser.id, name: newUser.name, email: newUser.email });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.loginUser = (req, res, next) => {
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+        if (err || !user) {
+            return res.status(400).json({
+                message: info ? info.message : 'Login failed',
+                user: user
+            });
+        }
+        req.login(user, { session: false }, (err) => {
+            if (err) {
+                res.send(err);
+            }
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+            return res.json({ user, token });
+        });
+    })(req, res);
 };
 
 exports.getAllUsers = async (req, res) => {
