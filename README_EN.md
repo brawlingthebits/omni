@@ -13,6 +13,9 @@ Omni is a Node.js web application that supports user authentication and real-tim
 - **Socket.io**: Enables real-time bi-directional communication between web clients and the server.
 - **JWT**: Used for securing and authenticating API requests and socket connections.
 - **Passport**: Authentication middleware for Node.js.
+- **Jest**: Testing framework to run and manage tests.
+- **Supertest**: Library to handle HTTP assertions, making it easy to test Node.js HTTP servers.
+- **bcryptjs**: Library to hash passwords before storing them in the database.
 
 ## 3. Setup Instructions
 
@@ -52,6 +55,54 @@ JWT_SECRET=your_jwt_secret
 npm start
 ```
 This will start the server on http://localhost:3000.
+
+## 3.5 Test the application
+
+To test the application, run the following command:
+
+```bash
+npm test
+```
+
+### Test Descriptions
+
+The integration tests focus on testing the CRUD operations related to users, as well as login functionality. Below is a breakdown of each test:
+
+#### User Creation
+
+- **Endpoint**: `POST /users`
+- **Purpose**: Tests the creation of a new user. It checks if the response status code is 201 and confirms that the returned user email matches the input.
+
+#### Retrieve All Users
+
+- **Endpoint**: `GET /users`
+- **Purpose**: Validates that the API can retrieve a list of users, ensuring the response contains at least one user and returns a status code of 200.
+
+#### Retrieve Specific User
+
+- **Endpoint**: `GET /users/:id`
+- **Purpose**: Tests retrieval of a specific user by ID, verifying that the correct user data is returned with a status code of 200.
+
+#### Update User Information
+
+- **Endpoint**: `PUT /users/:id`
+- **Purpose**: Ensures that user data can be updated correctly and that the response reflects the updated information with a status code of 200.
+
+#### Delete User
+
+- **Endpoint**: `DELETE /users/:id`
+- **Purpose**: Confirms that a user can be successfully deleted, resulting in a status code of 204.
+
+#### User Not Found After Deletion
+
+- **Endpoint**: `GET /users/:id`
+- **Purpose**: After deleting a user, this test checks that the user no longer exists, expecting a 404 status code.
+
+#### Login Functionality
+
+- **Success Case**: Tests successful login with correct credentials, expecting a 200 status code and a JWT token in the response.
+- **Failure Case**: Incorrect password results in a 400 status code and an error message.
+- **Missing Credentials**: Attempting to log in without a password or missing credentials should also return a 400 status code with an appropriate error message.
 
 
 ## 4. User Guide

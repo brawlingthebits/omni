@@ -13,6 +13,9 @@ O Omni é um aplicativo da Web do Node.js que oferece suporte à autenticação 
 - **Socket.io**: Permite a comunicação bidirecional em tempo real entre clientes da Web e o servidor.
 - **JWT**: Usado para proteger e autenticar solicitações de API e conexões de soquete.
 - **Passport**: Middleware de autenticação para Node.js.
+- **Jest**: Estrutura de teste para executar e gerenciar testes.
+- **Supertest**: Biblioteca para lidar com asserções HTTP, facilitando o teste de servidores HTTP do Node.js.
+- **bcryptjs**: Biblioteca para fazer hash de senhas antes de armazená-las no banco de dados.
 
 ## 3. Instruções de configuração
 
@@ -52,6 +55,54 @@ JWT_SECRET=seu_jwt_secret
 npm start
 ```
 Isso iniciará o servidor em http://localhost:3000.
+
+## 3.5 Teste o aplicativo
+
+Para testar o aplicativo, execute o seguinte comando:
+
+```bash
+npm test
+```
+
+### Descrições dos testes
+
+Os testes de integração concentram-se em testar as operações CRUD relacionadas aos usuários, bem como a funcionalidade de login. Abaixo, há uma descrição detalhada de cada teste:
+
+#### Criação de usuário
+
+- Ponto final**: `POST /users`
+- **Purpose**: Testa a criação de um novo usuário. Ele verifica se o código de status da resposta é 201 e confirma se o e-mail do usuário retornado corresponde à entrada.
+
+#### Retrieve All Users (Recuperar todos os usuários)
+
+- Ponto de extremidade**: `GET /users`
+- **Purpose**: Valida se a API pode recuperar uma lista de usuários, garantindo que a resposta contenha pelo menos um usuário e retorne um código de status 200.
+
+#### Recuperar usuário específico
+
+- **Endpoint**: `GET /users/:id`
+- **Purpose**: Testa a recuperação de um usuário específico por ID, verificando se os dados corretos do usuário são retornados com um código de status 200.
+
+#### Atualizar informações do usuário
+
+- **Endpoint**: `PUT /users/:id`
+- **Purpose**: Assegura que os dados do usuário possam ser atualizados corretamente e que a resposta reflita as informações atualizadas com um código de status 200.
+
+#### Excluir usuário
+
+- **Endpoint**: `DELETE /users/:id`
+- **Purpose**: Confirma que um usuário pode ser excluído com êxito, resultando em um código de status 204.
+
+#### Usuário não encontrado após a exclusão
+
+- **Endpoint**: `GET /users/:id`
+- **Purpose**: Após a exclusão de um usuário, esse teste verifica se o usuário não existe mais, esperando um código de status 404.
+
+#### Funcionalidade de login
+
+- Caso de sucesso**: Testa o login bem-sucedido com as credenciais corretas, esperando um código de status 200 e um token JWT na resposta.
+- Caso de falha**: A senha incorreta resulta em um código de status 400 e uma mensagem de erro.
+- Credenciais ausentes**: A tentativa de fazer login sem uma senha ou sem credenciais também deve retornar um código de status 400 com uma mensagem de erro apropriada.
 
 
 ## 4. Guia do usuário
