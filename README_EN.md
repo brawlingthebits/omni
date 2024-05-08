@@ -111,6 +111,13 @@ After logging in and setting the JWT token, load the chat interface by navigatin
 - Endpoint: GET /chat
 - Authentication: JWT required in the query parameter.
 
+**Usuário Hyunjin conectou-se e enviou mensagem** 
+![alt text](./assets/1.png)
+**Usuário Vivi conectou-se e enviou mensagem** 
+![alt text](./assets/2.png)
+**Usuário Hyunjin recebeu a mensagem de Vivi**
+![alt text](./assets/3.png)
+
 ### Retrieve All Users
 To fetch all users in the database, send a GET request to the /users endpoint:
 

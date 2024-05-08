@@ -83,6 +83,10 @@ localStorage.setItem('jwtToken', 'Bearer <your_jwt_token>');
 #### Interface de bate-papo
 Depois de fazer login e definir o token JWT, carregue a interface de bate-papo navegando até http://localhost:3000/chat.
 
+![alt text](./assets/1.png)
+![alt text](./assets/2.png)
+![alt text](./assets/3.png)
+
 ## 5. Documentação da API
 
 ### Endpoints
