@@ -39,7 +39,6 @@ io.use((socket, next) => {
       if (err) {
         return next(new Error('Authentication error - Invalid token'));
       }
-      console.log("Decoded JWT:", decoded); // This will show you what's in your JWT payload
       socket.decoded = decoded;
       next();
     });
@@ -49,9 +48,7 @@ io.use((socket, next) => {
 });
 
 io.on('connection', (socket) => {
-  console.log(`${socket.decoded.name || "Anonymous"} connected`);
   const userName = socket.decoded && socket.decoded.name ? socket.decoded.name : "Anonymous";
-  console.log(`${userName} connected`);
   socket.join("MainRoom");
 
   socket.on('sendMessage', ({ message, room = "MainRoom" }) => {
