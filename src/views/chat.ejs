@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        #message-container {
+            width: 80%;
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        #message-form {
+            display: flex;
+            width: 80%;
+        }
+        #message-input {
+            flex-grow: 1;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h1>Welcome to the Main Chat Room</h1>
+        <div id="message-container"></div>
+        <form id="message-form">
+            <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            const socket = io(`/?token=${token}`);
+
+            socket.on('connect', () => {
+                console.log('Connected to server with token.');
+            });
+
+            document.getElementById('message-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const messageInput = document.getElementById('message-input');
+                const message = messageInput.value.trim();
+                if (message) {
+                    socket.emit('sendMessage', { message: message, room: "MainRoom" });
+                    messageInput.value = '';
+                }
+            });
+
+            socket.on('receiveMessage', (data) => {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `${data.user}: ${data.text}`;
+                document.getElementById('message-container').appendChild(messageElement);
+                document.getElementById('message-container').scrollTop = document.getElementById('message-container').scrollHeight;
+            });
+
+            socket.on('connect_error', (error) => {
+                console.error('Connection failed:', error);
+                alert('Connection failed, please check the console for details.');
+            });
+        } else {
+            console.error('No token found, please log in.');
+        }
+    </script>
+</body>
+</html>

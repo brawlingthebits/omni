@@ -3,19 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
-/* exports.createUser = async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-        if (!name || !email || !password) {
-            return res.status(400).send('Missing required fields');
-        }
-        const newUser = await User.create({ name, email, password });
-        res.status(201).json({ id: newUser.id, name: newUser.name, email: newUser.email });
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-}; */
-
 exports.createUser = async (req, res) => {
     const { name, email, password } = req.body;
     try {
@@ -45,7 +32,7 @@ exports.loginUser = (req, res, next) => {
             if (err) {
                 res.send(err);
             }
-            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+            const token = jwt.sign({ id: user.id, name: user.name }, process.env.JWT_SECRET, { expiresIn: '1d' });
             return res.json({ user, token });
         });
     })(req, res);
